@@ -82,9 +82,10 @@ RSpec.shared_examples "resource index" do |model|
   let!(:resources) { (1..5).map {|idx| FactoryGirl.create(model) } }
   let!(:apply_roles) { apply_organizer user, resources }
   let(:payload) { parsed_body }
+  let(:plural_path) {if (model == :inquiry) then "inquiries_path" else "#{model}s_path" end}
 
   it "returns all #{model} instances" do
-    jget send("#{model}s_path"), {}, {"Accept"=>"application/json"}
+    jget send(plural_path), {}, {"Accept"=>"application/json"}
     expect(response).to have_http_status(:ok)
     expect(response.content_type).to eq("application/json")
 
@@ -122,9 +123,10 @@ RSpec.shared_examples "create resource" do |model|
   let(:resource_state) { FactoryGirl.attributes_for(model) }
   let(:payload)        { parsed_body }
   let(:resource_id)    { payload["id"] }
+  let(:plural_path) {if (model == :inquiry) then "inquiries_path" else "#{model}s_path" end}
 
   it "can create valid #{model}" do
-    jpost send("#{model}s_path"), resource_state
+    jpost send(plural_path), resource_state
     expect(response).to have_http_status(:created)
     expect(response.content_type).to eq("application/json") 
 
@@ -139,8 +141,9 @@ RSpec.shared_examples "create resource" do |model|
 end
 
 RSpec.shared_examples "modifiable resource" do |model|
+  let(:plural_path) {if (model == :inquiry) then "inquiries_path" else "#{model}s_path" end}
   let(:resource) do 
-    jpost send("#{model}s_path"), FactoryGirl.attributes_for(model)
+    jpost send(plural_path), FactoryGirl.attributes_for(model)
     expect(response).to have_http_status(:created)
     parsed_body
   end

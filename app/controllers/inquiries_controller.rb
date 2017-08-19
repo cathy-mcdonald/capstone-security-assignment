@@ -1,5 +1,9 @@
 class InquiriesController < ApplicationController
   before_action :set_inquiry, only: [:show, :update, :destroy]
+  wrap_parameters :inquiry, include: ["subject", "text"]
+  before_action :authenticate_user!, only: [:create]
+#  after_action :verify_authorized
+#  after_action :verify_policy_scoped, only: [:index]
 
   # GET /inquiries
   # GET /inquiries.json
@@ -20,7 +24,7 @@ class InquiriesController < ApplicationController
     if @inquiry.save
       render :show, status: :created, location: @inquiry
     else
-      render json: @inquiry.errors, status: :unprocessable_entity
+      render json: {errors:@inquiry.errors.messages}, status: :unprocessable_entity
     end
   end
 
@@ -32,7 +36,7 @@ class InquiriesController < ApplicationController
     if @inquiry.update(inquiry_params)
       head :no_content
     else
-      render json: @inquiry.errors, status: :unprocessable_entity
+      render json: {errors:@inquiry.errors.messages}, status: :unprocessable_entity
     end
   end
 
