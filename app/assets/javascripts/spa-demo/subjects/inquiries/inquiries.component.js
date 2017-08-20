@@ -52,18 +52,6 @@
     //////////////
   }
 
-
-/*  InquiryEditorController.$inject = ["$scope","$q",
-                                   "$state", "$stateParams",
-                                   "spa-demo.authz.Authz",                                   
-                                   "spa-demo.subjects.Inquiry",
-                                   "spa-demo.subjects.InquiryThing",
-                                   "spa-demo.subjects.InquiryLinkableThing",
-                                   ];
-  function InquiryEditorController($scope, $q, $state, $stateParams, 
-  
-*/
-
   InquiryEditorController.$inject = ["$scope","$q",
                                      "$state", "$stateParams",
                                      "spa-demo.authz.Authz",                                   
@@ -74,6 +62,8 @@
     var vm=this;
     vm.create = create;
     vm.clear  = clear;
+    vm.update = update;
+    vm.remove = remove;
 
     vm.$onInit = function() {
       console.log("InquiryEditorController",$scope);
@@ -116,6 +106,21 @@
         handleError);
     }
 
+    function update() {
+      vm.item.errors = null;
+      var update=vm.item.$update();
+      linkThings(update);
+    }
+
+    function remove() {
+      vm.item.errors = null;
+      vm.item.$delete().then(
+        function(){ 
+          clear();
+        },
+        handleError);      
+    }
+    
    function handleError(response) {
       console.log("error", response);
       if (response.data) {

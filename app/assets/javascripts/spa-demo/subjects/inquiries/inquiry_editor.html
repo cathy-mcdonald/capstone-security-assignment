@@ -8,13 +8,11 @@
     <input class="col-xs-9"
            name="inquiry-subject" 
            ng-model="$ctrl.item.subject" 
-           ng-readonly="!$ctrl.authz.canUpdate"
            maxlength="80"
            pattern=".{3,}" title="3 character minimum for Subject"/>
     <label class="col-xs-3">Text:</label>
     <textarea class="col-xs-9"
            name="inquiry-text" 
-           ng-readonly="!$ctrl.authz.canUpdate"
            ng-model="$ctrl.item.text">
     </textarea>
     <span class="invalid">{{$ctrl.item.errors.name}}</span>
@@ -31,10 +29,17 @@
               ng-click="$ctrl.create()">Create Inquiry</button>
 
     </span>
-    <button name="inquiry-clear"
-            type="submit"
-            ng-show="$ctrl.item.id"
-            ng-click="$ctrl.clear()">Clear Inquiry</button>
+    <span ng-show="$ctrl.item.id">
+      <button name="inquiry-update"
+              type="submit"
+              ng-click="$ctrl.update()">Update Inquiry</button>
+   	  <button name="inquiry-delete"
+              type="submit"
+              ng-click="$ctrl.remove()">Delete Inquiry</button>
+   	  <button name="inquiry-clear"
+              type="submit"
+              ng-click="$ctrl.clear()">Clear Inquiry</button>
+    </span>
   </div>
 
   <div class="inquiry-subject row col-lg-12"
