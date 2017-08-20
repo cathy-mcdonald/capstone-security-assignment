@@ -2,35 +2,44 @@
   <span class="inquiry_id id">{{$ctrl.item.id}}</span>
   <span class="invalid">{{$ctrl.item.errors.full_messages}}</span>
 
-  <div class="inquiry-subject row col-lg-12">
+  <div class="inquiry-subject row col-lg-12"
+  	   ng-show="$ctrl.authz.authenticated">
     <label class="col-xs-3">Subject:</label>
     <input class="col-xs-9"
            name="inquiry-subject" 
            ng-model="$ctrl.item.subject" 
+           ng-readonly="!$ctrl.authz.canUpdate"
            maxlength="80"
            pattern=".{3,}" title="3 character minimum for Subject"/>
     <label class="col-xs-3">Text:</label>
     <textarea class="col-xs-9"
            name="inquiry-text" 
+           ng-readonly="!$ctrl.authz.canUpdate"
            ng-model="$ctrl.item.text">
     </textarea>
     <span class="invalid">{{$ctrl.item.errors.name}}</span>
   </div>
 
 
-  <div class="inquiry-controls">
- <!--   <span ng-show="$ctrl.authz.authenticated">-->
+  <div class="inquiry-controls"
+  	   ng-show="$ctrl.authz.authenticated">
+    <span>
       <button name="inquiry-create"
               ng-show="!$ctrl.item.id"
               type="submit"
               ng-disabled="inquiryform.$invalid"
               ng-click="$ctrl.create()">Create Inquiry</button>
 
- <!--   </span> -->
+    </span>
     <button name="inquiry-clear"
             type="submit"
             ng-show="$ctrl.item.id"
             ng-click="$ctrl.clear()">Clear Inquiry</button>
+  </div>
+
+  <div class="inquiry-subject row col-lg-12"
+  	   ng-show="!$ctrl.authz.authenticated">
+  	   <span>Please login or signup to make an inquiry</span>
   </div>
 
 </form>

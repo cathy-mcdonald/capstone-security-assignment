@@ -6,20 +6,20 @@
     .component("sdInquirySelector", {
       templateUrl: inquirySelectorTemplateUrl,
       controller: InquirySelectorController,
-/*      bindings: {
+      bindings: {
         authz: "<"
       },
-*/    })
+    })
     .component("sdInquiryEditor", {
       templateUrl: inquiryEditorTemplateUrl,
       controller: InquiryEditorController,
-/*      bindings: {
+      bindings: {
         authz: "<"
       },
       require: {
         inquiriesAuthz: "^sdInquiriesAuthz"
       }
-*/    });
+    });
 
 
   inquirySelectorTemplateUrl.$inject = ["spa-demo.config.APP_CONFIG"];
@@ -31,33 +31,24 @@
     return APP_CONFIG.inquiry_editor_html;
   }    
 
-/*  InquirySelectorController.$inject = ["$scope",
+  InquirySelectorController.$inject = ["$scope",
                                        "$stateParams",
                                        "spa-demo.authz.Authz",
                                        "spa-demo.subjects.Inquiry"];
   function InquirySelectorController($scope, $stateParams, Authz, Inquiry) {
-*/  InquirySelectorController.$inject = ["$scope",
-										 "$stateParams",
-                                       	 "spa-demo.subjects.Inquiry"];
-  function InquirySelectorController($scope, $stateParams, Inquiry) {
     var vm=this;
     
     vm.$onInit = function() {
-      if (!$stateParams.id) { 
-        vm.items = Inquiry.query(); 
-      }
-    };
-
-/*    vm.$onInit = function() {
       console.log("InquirySelectorController",$scope);
       $scope.$watch(function(){ return Authz.getAuthorizedUserId(); }, 
-                    function(){ 
-                      if (!$stateParams.id) { 
-                        vm.items = Inquiry.query(); 
-                      }
-                    });
-    }
-*/    return;
+	    function(){ 
+	      if (!$stateParams.id) { 
+	        vm.items = Inquiry.query(); 
+	      }
+	    });
+    };
+    
+    return;
     //////////////
   }
 
@@ -74,10 +65,10 @@
 */
 
   InquiryEditorController.$inject = ["$scope","$q",
-                                   "$state", "$stateParams",
-                                   "spa-demo.authz.Authz",                                   
-                                   "spa-demo.subjects.Inquiry"
-                                   ];
+                                     "$state", "$stateParams",
+                                     "spa-demo.authz.Authz",                                   
+                                     "spa-demo.subjects.Inquiry"
+                                    ];
   function InquiryEditorController($scope, $q, $state, $stateParams, 
                                  Authz, Inquiry) {
     var vm=this;
@@ -86,26 +77,21 @@
 
     vm.$onInit = function() {
       console.log("InquiryEditorController",$scope);
-      if ($stateParams.id) {
-        reload($stateParams.id);
-      } else {
-        newResource();
-      }
-/*      $scope.$watch(function(){ return Authz.getAuthorizedUserId(); }, 
-                    function(){ 
-                      if ($stateParams.id) {
-                        reload($stateParams.id);
-                      } else {
-                        newResource();
-                      }
-                    });
-*/    };
+       $scope.$watch(function(){ return Authz.getAuthorizedUserId(); }, 
+         function(){ 
+           if ($stateParams.id) {
+             reload($stateParams.id);
+           } else {
+             newResource();
+           }
+         });
+    };
     return;
     //////////////
     function newResource() {
       console.log("newResource()");
       vm.item = new Inquiry();
-//      vm.inquirysAuthz.newItem(vm.item);
+      vm.inquiriesAuthz.newItem(vm.item);
       return vm.item;
     }
 
@@ -113,7 +99,7 @@
       var itemId = inquiryId ? inquiryId : vm.item.id;
       console.log("re/loading inquiry", itemId);
       vm.item = Inquiry.get({id:itemId});
-//      vm.inquirysAuthz.newItem(vm.item);
+      vm.inquiriesAuthz.newItem(vm.item);
       $q.all([vm.item.$promise]).catch(handleError);
     }
 
@@ -136,7 +122,7 @@
         vm.item["errors"]=response.data.errors;          
       } 
       if (!vm.item.errors) {
-        vm.item["errors"]={}
+        vm.item["errors"]={};
         vm.item["errors"]["full_messages"]=[response]; 
       }      
       $scope.inquiryform.$setPristine();

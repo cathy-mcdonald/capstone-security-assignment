@@ -14,7 +14,7 @@
     service.user=null;        //holds result from server
     service.userPromise=null; //promise during server request
     service.admin=false;
-    service.originator=[]
+    service.originator=[];
 
     service.getAuthorizedUser=getAuthorizedUser;
     service.getAuthorizedUserId=getAuthorizedUserId;
